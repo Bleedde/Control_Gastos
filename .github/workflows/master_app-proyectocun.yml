@@ -59,4 +59,4 @@ jobs:
         with:
           app-name: "app-proyectocun"
           slot-name: "Production"
-          package: dist-artifact # <-- apunta a la ruta correcta
+          package: dist-artifact/ # <-- Copia el contenido de dist directo a wwwroot
