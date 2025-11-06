@@ -33,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
@@ -41,12 +44,12 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D0AC269BC8944EE98F311057343B7805 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_77779EB2A2CF488BB3BF38CDC761D91F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3ACE3D897A534641919F96DC2D43258B }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: "app-proyectocun"
-          package: .
+          package: dist
