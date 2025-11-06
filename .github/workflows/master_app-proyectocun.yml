@@ -9,14 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Necesario para actions/checkout
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js 24.x
+      - name: Set up Node.js 24.x
         uses: actions/setup-node@v3
         with:
-          node-version: 24.x
+          node-version: "24.x"
 
       - name: Install dependencies and build
         run: |
@@ -32,6 +34,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      id-token: write # Necesario para autenticación federada (OIDC)
+      contents: read # Necesario para actions/checkout
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,12 +49,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D0AC269BC8944EE98F311057343B7805 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_77779EB2A2CF488BB3BF38CDC761D91F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3ACE3D897A534641919F96DC2D43258B }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: "app-proyectocun"
+          slot-name: "Production"
           package: dist
